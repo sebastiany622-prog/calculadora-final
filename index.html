@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Química Universal</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <a href="#" class="logo" onclick="switchView('dashboard')">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#44ff44" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v2M15 3v2M3 8h18M5 8v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8M10 14h4"/></svg>
+      <span>Calculadora</span>
+    </a>
+    <nav class="main-nav" id="nav-menu">
+      <button onclick="switchView('dashboard')" class="active" data-target="dashboard">Inicio</button>
+      <button onclick="switchView('moles')" data-target="moles">Moles</button>
+      <button onclick="switchView('masa')" data-target="masa">Masa Molar</button>
+      <button onclick="switchView('composicion')" data-target="composicion">Composición</button>
+      <button onclick="switchView('formula')" data-target="formula">Fórmulas</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- View: Dashboard -->
+    <section id="view-dashboard" class="view-section active">
+      <div class="section-header">
+        <h1>Centro de Control</h1>
+        <p>Selecciona un módulo interdimensional para comenzar el análisis.</p>
+      </div>
+      
+      <div class="dashboard-grid">
+        <div class="sci-card" onclick="switchView('moles')">
+          <h2 class="tech-title">Moles y Avogadro</h2>
+          <p>Conversión de masa a cantidad de sustancia y partículas.</p>
+        </div>
+        <div class="sci-card" onclick="switchView('masa')">
+          <h2 class="tech-title">Masa Molar</h2>
+          <p>Cálculo del peso molecular exacto de compuestos.</p>
+        </div>
+        <div class="sci-card" onclick="switchView('composicion')">
+          <h2 class="tech-title">Composición %</h2>
+          <p>Análisis porcentual en masa de cada elemento.</p>
+        </div>
+        <div class="sci-card" onclick="switchView('formula')">
+          <h2 class="tech-title">Fórmulas</h2>
+          <p>Deducción de fórmulas empíricas y moleculares.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- View: Moles -->
+    <section id="view-moles" class="view-section">
+      <div class="section-header">
+        <h1>Moles y Avogadro</h1>
+        <p>Análisis cuantitativo de partículas subatómicas.</p>
+      </div>
+      
+      <div class="calc-container">
+        <div class="sci-card main-input-card">
+          <div class="form-group">
+            <label>Muestra (gramos)</label>
+            <div class="tech-input-group">
+              <input type="number" id="mass-input" placeholder="0.00" step="0.01">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Fórmula Química</label>
+            <div class="tech-input-group">
+              <input type="text" id="formula-input-moles" placeholder="Ej: H2O">
+              <button class="portal-btn" onclick="executeMoles()">Calcular</button>
+            </div>
+          </div>
+
+          <div class="examples-wrap">
+            <p class="example-label">Ejemplos:</p>
+            <span class="tag" onclick="loadExample('moles', 'H2O', 18.02)">Agua</span>
+            <span class="tag" onclick="loadExample('moles', 'NaCl', 58.44)">Sal de Mesa</span>
+            <span class="tag" onclick="loadExample('moles', 'C6H12O6', 180.16)">Glucosa</span>
+            <span class="tag" onclick="loadExample('moles', 'O2', 32.00)">Oxígeno</span>
+          </div>
+
+          <div class="tech-keyboard" id="keyboard-moles"></div>
+          <button class="clear-all-btn" onclick="clearCurrentView('moles')">Limpiar Datos</button>
+        </div>
+
+        <div class="results-panel" id="results-moles-section">
+          <div class="res-item">
+            <h3>Moles</h3>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">(Cantidad de sustancia)</p>
+            <div class="val" id="result-moles">-</div>
+          </div>
+          <div class="res-item">
+            <h3>Moléculas</h3>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">(Partículas completas del compuesto)</p>
+            <div class="val" id="result-molecules">-</div>
+          </div>
+          <div class="res-item">
+            <h3>Átomos Totales</h3>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">(Suma individual de todos los elementos)</p>
+            <div class="val" id="result-atoms">-</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View: Masa Molar -->
+    <section id="view-masa" class="view-section">
+      <div class="section-header">
+        <h1>Masa Molar</h1>
+        <p>Cálculo de pesos moleculares exactos.</p>
+      </div>
+      <div class="calc-container">
+        <div class="sci-card">
+          <div class="form-group">
+            <label>Compuesto</label>
+            <div class="tech-input-group">
+              <input type="text" id="formula-input-masa" placeholder="H2SO4">
+              <button class="portal-btn" onclick="executeMasaMolar()">Calcular</button>
+            </div>
+          </div>
+          <div class="examples-wrap">
+            <p class="example-label">Ejemplos:</p>
+            <span class="tag" onclick="loadExample('masa', 'CO2')">Dióxido de Carbono</span>
+            <span class="tag" onclick="loadExample('masa', 'KMnO4')">Permanganato de K</span>
+            <span class="tag" onclick="loadExample('masa', 'Fe2O3')">Óxido de Hierro</span>
+          </div>
+          <div class="tech-keyboard" id="keyboard-masa"></div>
+          <button class="clear-all-btn" onclick="clearCurrentView('masa')">Limpiar</button>
+        </div>
+        <div class="results-panel" id="results-masa-section">
+          <div class="res-item">
+            <h3>Masa Molar</h3>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">(Gramos por cada Mol del compuesto)</p>
+            <div class="val" id="result-masa-val">-</div>
+            <div style="font-size: 0.9rem; font-weight:bold; color: var(--primary); margin-top: 5px;">g/mol</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View: Composicion -->
+    <section id="view-composicion" class="view-section">
+      <div class="section-header">
+        <h1>Composición Porcentual</h1>
+        <p>Análisis de elementos constituyentes.</p>
+      </div>
+      <div class="calc-container">
+        <div class="sci-card">
+          <div class="form-group">
+            <label>Fórmula</label>
+            <div class="tech-input-group">
+              <input type="text" id="formula-input-composicion" placeholder="CaCO3">
+              <button class="portal-btn" onclick="executeComposicion()">Analizar</button>
+            </div>
+          </div>
+          <div class="examples-wrap">
+            <p class="example-label">Ejemplos:</p>
+            <span class="tag" onclick="loadExample('composicion', 'NH3')">Amoníaco</span>
+            <span class="tag" onclick="loadExample('composicion', 'CH4')">Metano</span>
+            <span class="tag" onclick="loadExample('composicion', 'HCl')">Ácido Clorhídrico</span>
+          </div>
+          <div class="tech-keyboard" id="keyboard-comp"></div>
+          <button class="clear-all-btn" onclick="clearCurrentView('composicion')">Limpiar</button>
+        </div>
+        <div class="results-panel" id="results-comp-section">
+          <div style="background: white; border-radius: 16px; padding: 1.5rem; border: 2px solid #f1f5f9;">
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px; font-weight:bold;">Proporción de cada elemento en la mezcla total:</p>
+            <div id="composition-results" style="display: flex; flex-direction: column; gap: 10px;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View: Formula -->
+    <section id="view-formula" class="view-section">
+      <div class="section-header">
+        <h1>Deducción de Fórmulas</h1>
+        <p>Análisis de composición centesimal.</p>
+      </div>
+      <div class="calc-container">
+        <div class="sci-card">
+          <div id="empirical-elements-container" style="display:flex; flex-direction:column; gap:10px; margin-bottom: 1rem;">
+            <div class="grid-pct dynamic-el-row">
+              <input type="text" class="el-symbol" placeholder="Símbolo (ej: C)">
+              <input type="number" class="el-pct" placeholder="% Masa">
+            </div>
+            <div class="grid-pct dynamic-el-row">
+              <input type="text" class="el-symbol" placeholder="Símbolo (ej: H)">
+              <input type="number" class="el-pct" placeholder="% Masa">
+            </div>
+          </div>
+          <button class="tag" style="width:100%; border-color:var(--portal-green); color:var(--portal-green); margin-bottom:1.5rem;" onclick="addEmpiricalElement()">+ Añadir Elemento</button>
+          
+          <div class="form-group">
+            <label>Masa experimental (Para F. Molecular, Opcional)</label>
+            <div class="tech-input-group"><input type="number" id="target-mass" placeholder="Ej: 180.16 g/mol"></div>
+          </div>
+          <button class="portal-btn" style="width:100%; justify-content:center;" onclick="executeEmpiricalFormula()">Deducir Fórmulas</button>
+          <div class="examples-wrap" style="margin-top:1.5rem">
+            <p class="example-label">Ejemplos:</p>
+            <span class="tag" onclick="loadFormulaExample({'C': 40.00, 'H': 6.71, 'O': 53.29}, 180.16)">Glucosa</span>
+            <span class="tag" onclick="loadFormulaExample({'C': 82.66, 'H': 17.34}, 58.12)">Butano</span>
+            <span class="tag" onclick="loadFormulaExample({'Na': 39.34, 'Cl': 60.66})">Sal común (NaCl)</span>
+          </div>
+          <button class="clear-all-btn" style="margin-top:10px" onclick="clearCurrentView('formula')">Limpiar</button>
+        </div>
+        <div class="results-panel" id="results-formula-section">
+          <div class="res-item">
+            <h3>Fórmula Empírica</h3>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">(La proporción más simple y básica)</p>
+            <div class="val" id="result-empirical">-</div>
+          </div>
+          <div class="res-item">
+            <h3>Fórmula Molecular</h3>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">(La estructura real y exacta)</p>
+            <div class="val" id="result-molecular">-</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mascot Zone -->
+  <div class="mascot-zone">
+    <div id="portal" class="portal-effect"></div>
+    <div class="bubble" id="mascot-speech">Wubba Lubba Dub Dub!</div>
+    <!-- Máscara idéntica al portal: Rick solo es visible dentro del vórtice -->
+    <div class="rick-portal-mask" id="rick-mask">
+      <img src="rick_mascot_1778091897270.png" class="rick-character" id="mascot-trigger" alt="Rick Sanchez">
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
